@@ -1,0 +1,6 @@
+blinker==1.4
+mlflow==2.4.0
+pandas
+pillow
+scikit-learn
+seaborn
