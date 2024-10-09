@@ -25,6 +25,22 @@ Welcome to the impressive trash classifier developed by XmartLabs :-)
 * Follow the instructions to access the notebook on your browser
 
 
+### Mac users
+For Mac users you can opt to run the notebook outside Docker, using conda.
+To do so, you need to install the required dependencies:
+
+```bash
+conda env create -f environment.yml
+conda activate trash-classifier
+```
+
+Then you can run the notebook:
+
+```bash
+jupyter notebook
+```
+
+
 ## Deploy
 
 To deploy the trained model follow these steps:
