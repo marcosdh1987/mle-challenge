@@ -17,5 +17,5 @@ Provide your suggestions in a Markdown file describing each one with a short par
 Implement one of the suggestions you mentioned above.
 
 3. Delivery
-Please fork the repository to a private repository, and push your changes there.
-Add GitHub users mats-claassen and pgrill to the repository, and let us know by email that you finished.
+Please clone this repository and create a private one in your user. Push your changes there. Please create a first commit with the current status of the code.
+Add GitHub users mats-claassen, glema-xmartlabs and pgrill to the repository, and let us know by email when you have finished.
