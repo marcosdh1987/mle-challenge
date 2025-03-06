@@ -16,6 +16,6 @@ Provide your suggestions in a Markdown file describing each one with a short par
 2. Implementation:
 Implement one of the suggestions you mentioned above.
 
-3. Delivery
+3. Delivery:
 Please clone this repository and create a private one in your user. Push your changes there. Please create a first commit with the current status of the code.
 Add GitHub users mats-claassen, glema-xmartlabs and pgrill to the repository, and let us know by email when you have finished.
