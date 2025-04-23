@@ -52,6 +52,19 @@ To deploy the trained model follow these steps:
 * Inside the GCP instance, start the TF Serving docker container pointing to the model location:
   * Run on GCP:
   ```
+## Training via CLI
+
+Once you have downloaded and prepared the TrashNet dataset, you can train the model using the provided command-line script and configuration:
+
+```bash
+python train.py --config config/config.yaml
+```
+
+This will:
+- Load data and split according to `val_split`.
+- Build the model architecture as configured.
+- Log parameters and metrics to MLflow.
+- Save the trained model under the `models/` directory.
   docker run --rm -d --name=garbage_model -it -p 8501:8501 \
         -e MODEL_NAME=garbage \
         -e MODEL_BASE_PATH="gs://<PREFIX>" \
