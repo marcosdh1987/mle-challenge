@@ -12,14 +12,16 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: '3.10.14'
+
       - name: Cache pip dependencies
         uses: actions/cache@v3
         with:
@@ -27,13 +29,46 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest pytest-cov
+          pip freeze > requirements-lock.txt
+
+      - name: Save requirements
+        uses: actions/upload-artifact@v4
+        with:
+          name: requirements-lock
+          path: requirements-lock.txt
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10.14'
+
+      - name: Download requirements
+        uses: actions/download-artifact@v4
+        with:
+          name: requirements-lock
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements-lock.txt
+
       - name: Run tests
         run: |
-          make test
+          mkdir -p test-reports
+          pytest tests/ --tb=short -v --junitxml=test-reports/tests.xml
+
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
