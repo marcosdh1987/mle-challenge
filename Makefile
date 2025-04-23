@@ -24,6 +24,11 @@ uv-venv:
 	@$(VENV_DIR)/bin/python -m ipykernel install --user --name=$(KERNEL_NAME) --display-name="Python (uv)"
 	@echo "✅ uv virtual environment ready for Jupyter Notebook."
 
+generate-requirements-uv:
+	@command -v uv >/dev/null 2>&1 || pip install --user uv
+	@. $(VENV_DIR)/bin/activate && uv pip freeze > requirements.txt
+	@echo "✅ requirements.txt generated"
+
 # --- TRAINING ---
 train:
 	@echo "🚀 Training the model..."
