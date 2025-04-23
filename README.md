@@ -40,6 +40,24 @@ Then you can run the notebook:
 jupyter notebook
 ```
 
+Note: You could use Python UV to handle the dependencies. 
+```bash
+make uv-venv
+```
+
+## Training via CLI
+
+Once you have downloaded and prepared the TrashNet dataset, you can train the model using the provided command-line script and configuration:
+
+```bash
+make train
+```
+
+This will:
+- Load data and split according to `val_split`.
+- Build the model architecture as configured.
+- Log parameters and metrics to MLflow.
+- Save the trained model under the `models/` directory.
 
 ## Deploy
 

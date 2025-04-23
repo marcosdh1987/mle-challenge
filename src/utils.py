@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 from PIL import Image
 
 
@@ -32,21 +32,23 @@ def show_worst_preds(batch_gen, Y_pred, class_names, threshold=0.1):
     for pred_data, ax in zip(preds, axes):
         img = np.array(Image.open(pred_data[0]))
         ax.imshow(img.astype(np.uint8))
-        ax.set_title(f'Pred: {class_names[pred_data[2]]} ({pred_data[3]:.2f}) - {class_names[pred_data[1]]}')
-        ax.axis('off')
+        ax.set_title(
+            f"Pred: {class_names[pred_data[2]]} ({pred_data[3]:.2f}) - {class_names[pred_data[1]]}"
+        )
+        ax.axis("off")
     plt.tight_layout()
     plt.show()
 
 
 def crop_resize_image(img, target=(224, 224)):
-    """ Crop and resize a PIL Image to a squared target size """
+    """Crop and resize a PIL Image to a squared target size"""
     width, height = img.size
     crop_size = min(width, height)
 
-    left = (width - crop_size)/2
-    top = (height - crop_size)/2
-    right = (width + crop_size)/2
-    bottom = (height + crop_size)/2
+    left = (width - crop_size) / 2
+    top = (height - crop_size) / 2
+    right = (width + crop_size) / 2
+    bottom = (height + crop_size) / 2
 
     # Crop the center of the image
     img = img.crop((left, top, right, bottom))

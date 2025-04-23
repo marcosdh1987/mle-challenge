@@ -144,3 +144,4 @@ datasets/
 models/
 wandb/
 src/mlruns/
+mlruns/

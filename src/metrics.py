@@ -1,11 +1,13 @@
-from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
+from sklearn.metrics import classification_report, confusion_matrix
 
 
-def print_confusion_matrix(model, batch_generator, Y_pred, class_names, print_report=True):
+def print_confusion_matrix(
+    model, batch_generator, Y_pred, class_names, print_report=True
+):
     """
     This function shows the confusion matrix of a model's predictions given a batch generator
 
@@ -23,8 +25,12 @@ def print_confusion_matrix(model, batch_generator, Y_pred, class_names, print_re
     cm = confusion_matrix(batch_generator.classes, y_pred)
 
     if print_report:
-        print('Classification Report')
-        print(classification_report(batch_generator.classes, y_pred, target_names=class_names))
+        print("Classification Report")
+        print(
+            classification_report(
+                batch_generator.classes, y_pred, target_names=class_names
+            )
+        )
 
     df_cm = pd.DataFrame(cm, class_names, class_names)
     plt.figure(figsize=(10, 8))
@@ -32,7 +38,7 @@ def print_confusion_matrix(model, batch_generator, Y_pred, class_names, print_re
 
 
 def plot_accuracy(train_accuracy, val_accuracy):
-    epochs = range(1, len(train_accuracy)+1)
+    epochs = range(1, len(train_accuracy) + 1)
 
     plt.figure(figsize=(10, 6))
     plt.plot(epochs, train_accuracy, c="red", label="Training")
@@ -44,7 +50,7 @@ def plot_accuracy(train_accuracy, val_accuracy):
 
 
 def plot_loss(train_loss, val_loss):
-    epochs = range(1, len(train_loss)+1)
+    epochs = range(1, len(train_loss) + 1)
 
     plt.figure(figsize=(10, 6))
     plt.plot(epochs, train_loss, c="red", label="Training")
