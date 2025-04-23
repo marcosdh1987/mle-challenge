@@ -3,7 +3,6 @@ import mlflow
 
 
 class MLFlowTracker:
-
     def __init__(self, experiment_name):
         super().__init__()
         mlflow.set_experiment(experiment_name)
@@ -24,7 +23,6 @@ class MLFlowTracker:
 
 
 class MLFlowTrainTrackingCallback(keras.callbacks.Callback):
-
     def on_epoch_end(self, epoch, logs=None):
         res = {}
         for k in logs.keys():

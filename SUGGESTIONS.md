@@ -1,35 +1,37 @@
- # Next Steps and Improvements for Productionizing the Garbage Classification Model
+# Roadmap for Productionizing the Garbage Classification Model
 
- This document outlines recommended next steps, improvements, and missing components to bring the current garbage classification PoC into a robust, maintainable production system.
+This document prioritizes and organizes the key steps to strengthen and bring the current model to production, focusing on modularity, deployment, and engineering best practices.
 
- ## 1. Modularize and Parameterize the Training Pipeline
- - **Description**: Decouple hard-coded values and scripts by introducing a configuration-driven pipeline (e.g., using YAML/JSON configurations or a library like Hydra). Provide a single entrypoint script to orchestrate data loading, model building, training, evaluation, and artifact management.
- - **Benefit**: Improves reproducibility, makes experiments traceable, and simplifies hyperparameter tuning and automation.
+## 1. Modularization and Parameterization of the Training Pipeline
+- **Description**: Refactor the training pipeline to remove hardcoded values and tightly coupled scripts. Use configuration files (YAML/JSON) and a single entrypoint to orchestrate data loading, model building, training, evaluation, and artifact management.
+- **Benefit**: Improves reproducibility, enables experiment traceability, and simplifies hyperparameter tuning and automation.
 
- ## 2. Implement Automated Unit and Integration Testing
- - **Description**: Add pytest-based tests for data preprocessing functions, model architecture integrity, and end-to-end training loops (mocked). Validate expected outputs, shapes, and failure modes.
- - **Benefit**: Guarantees code reliability, prevents regressions, and enables safe refactoring.
+## 2. Model Exposure via Real-Time Inference API
+- **Description**: Create an API with FastAPI application (api/main.py) that provides:
+  - `/predict` POST endpoint accepting JPEG/PNG file uploads only
+  - Input validation of content type and preprocessing with Keras `preprocess_input`
+  - JSON response with `predicted_class`, `confidence`, and `all_confidences`
+  - `/health` GET endpoint reporting service status and model load state
+  - Structured logging at INFO level for key events
+  - Add support for image URLs or base64-encoded inputs
+  - Enhance OpenAPI documentation with request/response examples and parameter details
+  - Containerize the API (Docker).
+- **Benefit**: Enables reliable real-time predictions, clear API docs, and easy deployment workflows.
 
- ## 3. Integrate Experiment Tracking and Visualization
- - **Description**: Standardize on MLflow or a similar system for logging parameters, metrics, and artifacts. Ensure versioning of code, data, and models.
- - **Benefit**: Enhances transparency, collaboration, and model auditing capabilities.
+## 3. Experiment Tracking and Visualization
+- **Description**: Uses MLflow with a local SQLite backend (`mlruns.db`). Through provided `Makefile` targets (e.g., `make mlflow-ui`), you can:
+  - Launch the MLflow UI locally to browse experiments, runs, metrics, and artifacts
+  - Compare model versions and transition a model’s stage between Staging and Production
+- **Benefit**: Simplifies local experiment auditing, model registry workflows, and rapid iteration without external services.
 
- ## 4. Build CI/CD Pipeline
- - **Description**: Create GitHub Actions or another CI/CD pipeline to automate linting, testing, Docker builds, and deployment (to staging or model registry).
- - **Benefit**: Accelerates delivery, enforces quality gates, and maintains consistency across environments.
+## 4. Unit and Integration Tests
+- **Description**: Implement tests with pytest for preprocessing functions, model integrity, and (mocked) training loops. Validate expected outputs, shapes, and failure modes.
+- **Benefit**: Ensures reliability, prevents regressions, and enables safe refactoring.
 
- ## 5. Containerization and Deployment Strategy
- - **Description**: Refine the Dockerfile to include both training and serving images. Provide Helm/Kubernetes manifests or Docker Compose for scalable deployment.
- - **Benefit**: Simplifies environment management and ensures parity between development and production.
+## 5. CI/CD
+- **Description**: Create a pipeline (GitHub Actions or similar) to automate linting, tests, Docker builds, and deployment (to staging or model registry).
+- **Benefit**: Accelerates delivery, enforces quality, and maintains consistency across environments.
 
- ## 6. Data Validation and Monitoring
- - **Description**: Add checks for data schema, missing values, and data drift (e.g., using Great Expectations). Incorporate runtime monitoring of inputs and predictions.
- - **Benefit**: Improves data quality, early detection of anomalies, and model reliability.
-
- ## 7. Model Performance Monitoring and Alerting
- - **Description**: Implement a monitoring system (e.g., Prometheus/Grafana) to track inference latency, error rates, and accuracy on new data.
- - **Benefit**: Ensures SLA compliance and timely detection of model degradation.
-
- ## 8. Documentation and Onboarding
- - **Description**: Enhance README, inline docstrings, and generate API/reference documentation (e.g., with Sphinx). Provide a quickstart guide for developers and stakeholders.
- - **Benefit**: Reduces onboarding time and improves maintainability.
+## 6. Model Performance Monitoring and Alerting
+- **Description**: Implement monitoring (e.g., Prometheus/Grafana) for inference latency, error rates, and accuracy on new data. Set up alerts for degradation.
+- **Benefit**: Ensures SLA compliance and early detection of production issues.

@@ -1,0 +1,9 @@
+# API dependencies for Garbage Classification FastAPI service
+fastapi
+uvicorn[standard]
+mlflow==2.4.2
+tensorflow
+pyyaml
+numpy
+pillow
+python-multipart

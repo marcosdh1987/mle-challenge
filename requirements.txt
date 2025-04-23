@@ -1,6 +1,8 @@
+tensorflow
 blinker==1.4
 mlflow==2.4.2
 pandas==2.2.3
 pillow==10.4.0
 scikit-learn==1.5.2
 seaborn==0.13.2
+black[jupyter]
