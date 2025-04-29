@@ -5,6 +5,13 @@ PYTHON_VERSION ?= 3.10.0
 VENV_DIR       ?= .venv
 KERNEL_NAME    ?= trash-classifier
 
+# Download dataset using ./download_trashnet_dataset.sh
+dataset:
+	@echo "🚀 Downloading dataset..."
+	@chmod +x ./download_trashnet_dataset.sh
+	@./download_trashnet_dataset.sh
+	@echo "✅ Dataset downloaded."
+
 # Create a virtual environment with uv and register a Jupyter kernel
 uv-venv:
 	@echo "🚀 Creating virtual environment with uv..."

@@ -19,14 +19,13 @@ class GarbageClassifier:
         self.batch_size = batch_size
         self.tracker = tracker
 
-    def load_dataset(self, train_path, validation_path):
+    def load_dataset(self, train_path, validation_path, test_path=None):
         train_gen = ImageDataGenerator(
             preprocessing_function=tf.keras.applications.mobilenet_v3.preprocess_input,
             shear_range=0.2,
             zoom_range=0.2,
             width_shift_range=0.2,
             height_shift_range=0.2,
-            validation_split=self.val_split,
         )
         self.train_batches = train_gen.flow_from_directory(
             directory=train_path,
@@ -35,13 +34,11 @@ class GarbageClassifier:
             shuffle=True,
             seed=42,
             batch_size=self.batch_size,
-            subset="training",
         )
 
         # extract images to validation set
         valid_gen = ImageDataGenerator(
             preprocessing_function=tf.keras.applications.mobilenet_v3.preprocess_input,
-            validation_split=self.val_split,
         )
         self.valid_batches = valid_gen.flow_from_directory(
             directory=validation_path,
@@ -50,14 +47,27 @@ class GarbageClassifier:
             shuffle=False,
             seed=42,
             batch_size=self.batch_size,
-            subset="validation",
         )
+        # optionally load test set (no split)
+        if test_path:
+            test_gen = ImageDataGenerator(
+                preprocessing_function=tf.keras.applications.mobilenet_v3.preprocess_input
+            )
+            self.test_batches = test_gen.flow_from_directory(
+                directory=test_path,
+                target_size=(224, 224),
+                classes=self.class_names,
+                shuffle=False,
+                seed=42,
+                batch_size=self.batch_size,
+            )
 
         self.tracker.track_config(
             {
                 "val_split": self.val_split,
                 "batch_size": self.batch_size,
-                "dataset_size": self.valid_batches.samples + self.train_batches.samples,
+                "dataset_size": (self.train_batches.samples + self.valid_batches.samples)
+                    + (self.test_batches.samples if hasattr(self, 'test_batches') else 0),
             }
         )
 

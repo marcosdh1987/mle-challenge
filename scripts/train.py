@@ -56,14 +56,14 @@ def main():
     dataset_cfg = config["dataset"]
     train_path = dataset_cfg["train_path"]
     validation_path = dataset_cfg.get("validation_path", train_path)
+    test_path = dataset_cfg.get("test_path", None)
     class_names = dataset_cfg["class_names"]
     batch_size = dataset_cfg["batch_size"]
 
-    # Model configuration
+    # Model and training configuration
     model_cfg = config.get("model", {})
     training_cfg = config.get("training", {})
     experiment_name = config.get("experiment", {}).get("name", "garbage-classifier")
-    # output_cfg = config.get("output", {}) # No longer needed for manual saving
 
     # Initialize experiment tracker
     tracker = MLFlowTracker(experiment_name)
@@ -79,7 +79,11 @@ def main():
     classifier.val_split = dataset_cfg.get("val_split", classifier.val_split)
 
     # Load data
-    classifier.load_dataset(train_path=train_path, validation_path=validation_path)
+    classifier.load_dataset(
+        train_path=train_path,
+        validation_path=validation_path,
+        test_path=test_path,
+    )
 
     # Build model
     classifier.build_model(
@@ -101,6 +105,17 @@ def main():
 
     # Train model
     classifier.fit(epochs=training_cfg.get("epochs", 10))
+
+    # Evaluate on test set if available
+    if test_path:
+        logger.info("Evaluating on test set...")
+        test_loss, test_acc = classifier.model.evaluate(
+            classifier.test_batches, verbose=2
+        )
+        logger.info(f"Test loss: {test_loss:.4f}, Test accuracy: {test_acc:.4f}")
+        # Log test metrics to MLflow
+        mlflow.log_metric("test_loss", test_loss)
+        mlflow.log_metric("test_accuracy", test_acc)
 
     # Log and register the model using mlflow.tensorflow
     logger.info("Logging and registering the model...")

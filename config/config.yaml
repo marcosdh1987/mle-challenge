@@ -1,42 +1,41 @@
- # Configuration for Garbage Classification Training
- dataset:
-   # Path to the directory containing class subfolders for images
-   train_path: "datasets/kaggle_dataset2/images"
-   # Path used for validation; can be same as train_path when using split
-   validation_path: "datasets/kaggle_dataset2/images"
-   # List of class names in the same order as subfolder names
-   class_names:
-     - cardboard
-     - glass
-     - metal
-     - paper
-     - plastic
-     - trash
-   batch_size: 32
-   val_split: 0.15
+# Configuration for Garbage Classification Training
+dataset:
+  train_path: "datasets/kaggle_dataset2/train"
+  validation_path: "datasets/kaggle_dataset2/validation"
+  test_path: "datasets/kaggle_dataset2/test"
+  # List of class names in the same order as subfolder names
+  class_names:
+    - cardboard
+    - glass
+    - metal
+    - paper
+    - plastic
+    - trash
+  batch_size: 32
+  val_split: 0.15
 
- model:
-   base_model: "MobileNetV3Large"
-   image_size: 224
-   # Two hidden dense layers sizes
-   hidden_sizes:
-     - 512
-     - 128
-   l2_param: 0.002
-   dropout: 0.2
+model:
+  base_model: "MobileNetV3Large"
+  image_size: 224
+  # Two hidden dense layers sizes
+  hidden_sizes:
+    - 512
+    - 128
+  l2_param: 0.002
+  dropout: 0.2
 
- training:
-   epochs: 30
-   learning_rate: 0.0005
-   loss: categorical_crossentropy
-   min_lr: 0.00001
-   decrease_factor: 0.2
-   patience: 5
+training:
+  epochs: 30
+  learning_rate: 0.0005
+  loss: categorical_crossentropy
+  min_lr: 0.00001
+  decrease_factor: 0.2
+  patience: 5
 
- experiment:
-   name: "garbage-classifier-experiment"
+experiment:
+  name: "garbage-classifier-experiment"
 
- output:
-   # Where to save the trained model file
-   model_dir: "models"
-   model_name: "garbage_model.h5"
+output:
+  # Where to save the trained model file
+  model_dir: "models"
+  model_name: "garbage_model.h5"
